@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# FVM version cache (the selected SDK stays tracked in .fvmrc)
+.fvm/
+
+# Local environment and secret material
+**/.env
+**/.env.*
+!**/.env.example
+**/.envrc
+**/key.properties
+**/*.jks
+**/*.keystore
+**/*.p12
+**/AuthKey_*.p8
+**/*.mobileprovision
+**/*.pem
+**/*.key
+**/Secrets.xcconfig
+**/google-services.json
+**/GoogleService-Info.plist
+
+# Local Supabase state
+supabase/.branches/
+supabase/.temp/
