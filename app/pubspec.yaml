@@ -48,6 +48,7 @@ dev_dependencies:
   mocktail: 1.0.5
 
 flutter:
+  generate: true
   uses-material-design: true
 
 hooks:

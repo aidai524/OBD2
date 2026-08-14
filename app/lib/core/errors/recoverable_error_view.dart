@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:obd2app/core/theme/app_tokens.dart';
 
 enum AppErrorIcon { startup, notFound }
 
@@ -65,14 +66,14 @@ class RecoverableErrorPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.large),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(_iconData, size: 48),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.medium),
               Semantics(
                 header: true,
                 child: Text(
@@ -80,10 +81,10 @@ class RecoverableErrorPanel extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.small),
               Text(message, textAlign: TextAlign.center),
               if (onAction case final action?) ...[
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.large),
                 FilledButton(onPressed: action, child: Text(actionLabel!)),
               ],
             ],

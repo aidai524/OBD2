@@ -10,6 +10,7 @@ void main() {
   testWidgets('shows a safe loading state before startup completes', (
     tester,
   ) async {
+    final semantics = tester.ensureSemantics();
     final completer = Completer<AppConfig>();
 
     await tester.pumpWidget(AppStartup(loadConfig: () => completer.future));
@@ -17,6 +18,11 @@ void main() {
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.text('Starting…'), findsOneWidget);
+    expect(
+      tester.getSemantics(find.text('Starting…')),
+      isSemantics(label: 'Starting…', isLiveRegion: true),
+    );
+    semantics.dispose();
     expect(find.byType(NavigationBar), findsNothing);
 
     completer.complete(_testConfig);

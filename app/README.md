@@ -80,11 +80,41 @@ ID and iOS bundle ID, `com.example.obd2app`, are local placeholders. Do not use
 them for store signing, RevenueCat, OAuth, push notifications, or production
 services. Replace them after the company-owned reverse domain is confirmed.
 
+## Presentation baseline
+
+T-00-04 fixes V1 to an accessible Material 3 dark theme, the system font, and
+the documented design colors. Runtime localization is intentionally limited to
+`en-US`; all current user-visible shell and recovery copy comes from Flutter's
+generated localization resources. Android and iOS launch backgrounds use the
+same dark background token before Flutter renders its first frame.
+
+The unit preference defaults to imperial and can be changed in memory through
+Riverpod. Persistence and the Settings control belong to T-04-07. Conversions
+are display-only: OBD/domain values stay in their documented canonical units,
+and database mileage remains stored as integer miles. The API deliberately
+distinguishes PID distance sourced in kilometers from stored mileage sourced in
+miles.
+
+V1 display formatting uses en-US grouping and removes unnecessary trailing
+zeroes:
+
+| Canonical source | Imperial display | Metric display | Maximum decimals |
+|---|---|---|---|
+| Temperature in `°C` | `°F` | `°C` | 1 |
+| Speed in `km/h` | `mph` | `km/h` | 0 |
+| Pressure in `kPa` | `psi` | `kPa` | 1 imperial / 0 metric |
+| PID distance in `km` | `mi` | `km` | 1 imperial / 0 metric |
+| Stored mileage in `mi` | `mi` | `km` | 0 |
+
+Safety rules and thresholds must continue to use unrounded canonical values,
+never the formatted display value.
+
 ## Scope
 
 This directory currently contains the T-00-01 platform scaffold, the T-00-02
-dependency and environment configuration baseline, and the T-00-03 Riverpod /
-go_router application shell. The shell has Garage, Diagnostics, Live Data,
-History, and Settings tabs, plus recoverable startup and unknown-route states.
-The tab pages are placeholders: OBD support, onboarding, cloud services,
-subscriptions, and AI diagnosis belong to later backlog tasks.
+dependency and environment configuration baseline, the T-00-03 Riverpod /
+go_router application shell, and the T-00-04 theme, en-US localization, and unit
+display framework. The shell has Garage, Diagnostics, Live Data, History, and
+Settings tabs, plus recoverable startup and unknown-route states. The tab pages
+are placeholders: OBD support, onboarding, cloud services, subscriptions, and
+AI diagnosis belong to later backlog tasks.

@@ -6,6 +6,10 @@ import 'package:obd2app/app/app.dart';
 import 'package:obd2app/core/config/app_config.dart';
 import 'package:obd2app/core/config/app_config_provider.dart';
 import 'package:obd2app/core/errors/recoverable_error_view.dart';
+import 'package:obd2app/core/i18n/app_locale.dart';
+import 'package:obd2app/core/i18n/app_localizations.dart';
+import 'package:obd2app/core/theme/app_theme.dart';
+import 'package:obd2app/core/theme/app_tokens.dart';
 
 typedef AppConfigLoader = FutureOr<AppConfig> Function();
 
@@ -110,30 +114,51 @@ class _AppStartupState extends State<AppStartup> {
     }
 
     if (_isLoading) {
-      return const _StartupMaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Starting…'),
-              ],
-            ),
-          ),
-        ),
-      );
+      return const _StartupMaterialApp(home: _StartupLoadingView());
     }
 
-    return _StartupMaterialApp(
-      home: RecoverableErrorView(
-        icon: AppErrorIcon.startup,
-        title: 'Unable to start',
-        message: 'The app could not finish starting safely.',
-        actionLabel: 'Try Again',
-        onAction: _loadConfig,
+    return _StartupMaterialApp(home: _StartupErrorView(onRetry: _loadConfig));
+  }
+}
+
+class _StartupLoadingView extends StatelessWidget {
+  const _StartupLoadingView();
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return Scaffold(
+      body: Center(
+        child: Semantics(
+          liveRegion: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: AppSpacing.medium),
+              Text(localizations.startingMessage),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+}
+
+class _StartupErrorView extends StatelessWidget {
+  const _StartupErrorView({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return RecoverableErrorView(
+      icon: AppErrorIcon.startup,
+      title: localizations.startupErrorTitle,
+      message: localizations.startupErrorMessage,
+      actionLabel: localizations.tryAgainAction,
+      onAction: onRetry,
     );
   }
 }
@@ -145,6 +170,15 @@ class _StartupMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'OBD2 App', home: home);
+    return MaterialApp(
+      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+      locale: AppLocale.enUs,
+      supportedLocales: const [AppLocale.enUs],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      theme: AppTheme.dark,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.dark,
+      home: home,
+    );
   }
 }

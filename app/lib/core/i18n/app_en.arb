@@ -1,0 +1,64 @@
+{
+  "@@locale": "en",
+  "appTitle": "OBD2 App",
+  "@appTitle": {
+    "description": "Application title used by the operating system."
+  },
+  "garageTab": "Garage",
+  "@garageTab": {
+    "description": "Bottom navigation label for the garage."
+  },
+  "diagnosticsTab": "Diagnostics",
+  "@diagnosticsTab": {
+    "description": "Bottom navigation label for diagnostics."
+  },
+  "liveDataTab": "Live Data",
+  "@liveDataTab": {
+    "description": "Bottom navigation label for live vehicle data."
+  },
+  "historyTab": "History",
+  "@historyTab": {
+    "description": "Bottom navigation label for diagnostic history."
+  },
+  "settingsTab": "Settings",
+  "@settingsTab": {
+    "description": "Bottom navigation label for settings."
+  },
+  "tabPlaceholder": "{tabName} content will be added in a later task.",
+  "@tabPlaceholder": {
+    "description": "Temporary shell copy shown before a feature page is implemented.",
+    "placeholders": {
+      "tabName": {
+        "type": "String"
+      }
+    }
+  },
+  "pageNotFoundTitle": "Page not found",
+  "@pageNotFoundTitle": {
+    "description": "Title shown when a route cannot be matched."
+  },
+  "pageUnavailableMessage": "This page is unavailable.",
+  "@pageUnavailableMessage": {
+    "description": "Safe route error message that does not expose the requested URI."
+  },
+  "backToGarageAction": "Back to Garage",
+  "@backToGarageAction": {
+    "description": "Action that recovers from a route error."
+  },
+  "startingMessage": "Starting…",
+  "@startingMessage": {
+    "description": "Status shown while application startup is pending."
+  },
+  "startupErrorTitle": "Unable to start",
+  "@startupErrorTitle": {
+    "description": "Title shown after application startup fails."
+  },
+  "startupErrorMessage": "The app could not finish starting safely.",
+  "@startupErrorMessage": {
+    "description": "Safe startup error message that does not expose internal details."
+  },
+  "tryAgainAction": "Try Again",
+  "@tryAgainAction": {
+    "description": "Action that retries a recoverable operation."
+  }
+}

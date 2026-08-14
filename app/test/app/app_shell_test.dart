@@ -50,15 +50,16 @@ void main() {
     await _pumpApp(tester);
 
     for (final tab in AppTab.values) {
+      final tabLabel = _tabLabels[tab.index];
       final label = find.descendant(
         of: find.byType(NavigationDestination).at(tab.index),
-        matching: find.text(tab.label),
+        matching: find.text(tabLabel),
       );
       expect(label, findsOneWidget);
       expect(
         tester.getSemantics(label),
         isSemantics(
-          label: '${tab.label}\nTab ${tab.index + 1} of 5',
+          label: '$tabLabel\nTab ${tab.index + 1} of 5',
           isButton: true,
           hasTapAction: true,
         ),
@@ -92,7 +93,9 @@ void main() {
   });
 
   for (final tab in AppTab.values) {
-    testWidgets('opens ${tab.label} from ${tab.location}', (tester) async {
+    testWidgets('opens ${_tabLabels[tab.index]} from ${tab.location}', (
+      tester,
+    ) async {
       await _pumpApp(tester, initialLocation: tab.location);
 
       expect(find.byKey(ValueKey('tab-page-${tab.name}')), findsOneWidget);
@@ -135,6 +138,14 @@ void main() {
     semantics.dispose();
   });
 }
+
+const _tabLabels = [
+  'Garage',
+  'Diagnostics',
+  'Live Data',
+  'History',
+  'Settings',
+];
 
 Future<GoRouter> _pumpApp(
   WidgetTester tester, {

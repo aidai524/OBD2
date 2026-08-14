@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:obd2app/app/app_routes.dart';
 import 'package:obd2app/app/app_shell.dart';
 import 'package:obd2app/core/errors/recoverable_error_view.dart';
+import 'package:obd2app/core/i18n/app_localizations.dart';
 
 final appInitialLocationProvider = Provider<String>((ref) => AppRoutes.garage);
 
@@ -32,11 +33,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
     errorBuilder: (context, state) {
+      final localizations = AppLocalizations.of(context);
       return RecoverableErrorView(
         icon: AppErrorIcon.notFound,
-        title: 'Page not found',
-        message: 'This page is unavailable.',
-        actionLabel: 'Back to Garage',
+        title: localizations.pageNotFoundTitle,
+        message: localizations.pageUnavailableMessage,
+        actionLabel: localizations.backToGarageAction,
         onAction: () => context.go(AppRoutes.garage),
       );
     },
