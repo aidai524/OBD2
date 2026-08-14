@@ -4,6 +4,9 @@
 # FVM version cache (the selected SDK stays tracked in .fvmrc)
 .fvm/
 
+# Local Codex task archives
+.archive/
+
 # Local environment and secret material
 **/.env
 **/.env.*
