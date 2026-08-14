@@ -59,9 +59,9 @@ redacts the key from diagnostic output.
 ## Dependency baseline
 
 T-00-02 pins the V1 packages and commits both the Dart and iOS Swift Package
-Manager resolution files. Integrations are still deferred to their backlog
-tasks. In particular, Riverpod and go_router are not wired until T-00-03; BLE,
-Supabase, Drift, RevenueCat, reports, and notifications have no runtime
+Manager resolution files. T-00-03 wires Riverpod and go_router for the
+application shell only. BLE, Supabase, Drift, RevenueCat, reports, and
+notifications remain deferred to their backlog tasks and have no runtime
 initialization yet.
 
 Compatibility pins are intentional. The stable code generators are kept on a
@@ -82,7 +82,9 @@ services. Replace them after the company-owned reverse domain is confirmed.
 
 ## Scope
 
-This directory currently contains the T-00-01 platform scaffold and the T-00-02
-dependency and environment configuration baseline. Routing, state management,
-the five-tab shell, OBD support, cloud services, subscriptions, and AI diagnosis
-belong to later backlog tasks.
+This directory currently contains the T-00-01 platform scaffold, the T-00-02
+dependency and environment configuration baseline, and the T-00-03 Riverpod /
+go_router application shell. The shell has Garage, Diagnostics, Live Data,
+History, and Settings tabs, plus recoverable startup and unknown-route states.
+The tab pages are placeholders: OBD support, onboarding, cloud services,
+subscriptions, and AI diagnosis belong to later backlog tasks.
