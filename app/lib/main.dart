@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:obd2app/core/config/app_config.dart';
 
 void main() {
-  runApp(const MainApp());
+  final config = AppConfig.fromCompileTime();
+  runApp(MainApp(config: config));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({required this.config, super.key});
+
+  final AppConfig config;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+    return MaterialApp(
+      key: ValueKey(config.environment),
+      title: 'OBD2 App',
+      home: const Scaffold(body: Center(child: Text('Hello World!'))),
     );
   }
 }

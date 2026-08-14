@@ -14,7 +14,7 @@
 | 状态管理 | Riverpod | 当前稳定版，负责依赖注入与应用状态 |
 | 路由 | go_router | 声明式路由 |
 | BLE 连接 | flutter_blue_plus | iOS / Android BLE |
-| 蓝牙经典 | platform channel + Android SPP 库 | **仅 Android**；iOS 不支持通用 SPP，不展示该入口 |
+| 蓝牙经典 | platform channel + Android `BluetoothSocket` / RFCOMM | **仅 Android**；T-00-02 锁定为自有平台通道，不引入第三方 SPP Flutter 包；iOS 不支持通用 SPP，不展示该入口 |
 | WiFi 连接 | `dart:io` Socket（TCP）| ELM327 WiFi 版，端口由连接配置提供（常见默认值 35000）|
 | 支付 | RevenueCat Flutter SDK | `purchases_flutter` |
 | 后端平台 | Supabase | Auth、Postgres、Storage、Flutter SDK |
@@ -203,6 +203,13 @@ OBDClient（读 DTC / PID / VIN / 冻结帧、实时采样）
 | `staging` | TestFlight / Android 内测 | 独立 Supabase 项目与测试 RevenueCat entitlement |
 | `prod` | 正式上架 | 独立 Supabase 项目、正式 entitlement 与受限 secrets |
 
+Flutter 使用 `config/dev.json`、`config/staging.json`、`config/prod.json` 锁定
+`APP_ENV`，并通过第二个、被 Git 忽略的 `.env.<environment>` 文件注入
+`SUPABASE_URL` 与 `SUPABASE_PUBLISHABLE_KEY`。两者统一由
+`--dart-define-from-file` 在编译期注入；运行时不读取可变 dotenv 文件。缺失或非法
+环境、缺失公开配置、非 HTTPS 的 staging/prod URL 必须在启动时明确失败，不得静默
+回退为 dev 或 prod。
+
 客户端配置文件不进敏感密钥；CI 只注入构建所需的公开环境值。服务端秘密通过 Supabase Secrets 管理，并按环境隔离。
 
 Supabase access/refresh session 必须通过 Keychain/Keystore 支持的安全存储适配器持久化；不得把 refresh token 落入普通 preferences、日志或分析。登出/账号删除时清理会话与对应本地加密缓存，但在删除尚未同步数据前必须向用户说明并二次确认。
@@ -214,7 +221,7 @@ Supabase access/refresh session 必须通过 Keychain/Keystore 支持的安全�
 | 类别 | 包 |
 |---|---|
 | 应用状态/路由 | `flutter_riverpod`、`go_router` |
-| 连接 | `flutter_blue_plus`；Android SPP 使用经 T-00-02 验证的原生库/平台通道 |
+| 连接 | `flutter_blue_plus`；Android SPP 使用自有 platform channel 调用官方 `BluetoothSocket` / RFCOMM API，不引入第三方 SPP Flutter 包 |
 | 支付/云 | `purchases_flutter`、`supabase_flutter` |
 | 本地数据库 | `drift`、`drift_flutter`、`sqlite3`、`path`、`path_provider`、`flutter_secure_storage`；pubspec hook 配置 `sqlite3.source=sqlite3mc` |
 | UI/报告/本地化 | V1：`pdf`、`printing`、`share_plus`、`intl`、`flutter_local_notifications`、`timezone`；V1.1 图表任务再引入 `fl_chart` |

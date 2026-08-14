@@ -16,8 +16,62 @@ the repository root:
 fvm flutter pub get
 fvm flutter analyze
 fvm flutter test
-fvm flutter run
 ```
+
+## Environments
+
+The tracked files under `config/` select exactly one environment. Public
+Supabase client values come from an ignored local env file:
+
+```sh
+cp .env.example .env.dev
+cp .env.example .env.staging
+cp .env.example .env.prod
+```
+
+Replace the placeholders in each copy, then select an environment at build or
+run time. Keep the local env file first so the tracked profile remains the
+authoritative `APP_ENV` value. The application rejects unchanged example
+placeholders at startup:
+
+```sh
+fvm flutter run \
+  --dart-define-from-file=.env.dev \
+  --dart-define-from-file=config/dev.json
+
+fvm flutter run \
+  --dart-define-from-file=.env.staging \
+  --dart-define-from-file=config/staging.json
+
+fvm flutter run \
+  --dart-define-from-file=.env.prod \
+  --dart-define-from-file=config/prod.json
+```
+
+Only public client configuration belongs in these files. Supabase service-role
+keys, LLM keys, RevenueCat REST or webhook secrets, signing material, and
+database credentials must remain in their server-side secret stores.
+
+`AppConfig.fromCompileTime()` rejects missing or unknown profiles, malformed
+URLs, non-HTTPS staging/production URLs, and missing publishable keys. It also
+redacts the key from diagnostic output.
+
+## Dependency baseline
+
+T-00-02 pins the V1 packages and commits both the Dart and iOS Swift Package
+Manager resolution files. Integrations are still deferred to their backlog
+tasks. In particular, Riverpod and go_router are not wired until T-00-03; BLE,
+Supabase, Drift, RevenueCat, reports, and notifications have no runtime
+initialization yet.
+
+Compatibility pins are intentional. The stable code generators are kept on a
+combination that resolves without a prerelease Analyzer stack, and
+`flutter_secure_storage` remains on 10.3.1 until the Flutter Android toolchain can
+build the plugin's compileSdk 37 requirement. Dependency upgrades are separate
+tasks and must repeat both Dart tests and native builds.
+
+Android SPP is locked to an in-house platform channel over the official Android
+`BluetoothSocket` / RFCOMM API. No third-party SPP Flutter package is included.
 
 ## Identifier status
 
@@ -28,6 +82,7 @@ services. Replace them after the company-owned reverse domain is confirmed.
 
 ## Scope
 
-This directory currently contains the T-00-01 platform scaffold and architecture
-folders only. Routing, state management, the five-tab shell, OBD support, cloud
-services, subscriptions, and AI diagnosis belong to later backlog tasks.
+This directory currently contains the T-00-01 platform scaffold and the T-00-02
+dependency and environment configuration baseline. Routing, state management,
+the five-tab shell, OBD support, cloud services, subscriptions, and AI diagnosis
+belong to later backlog tasks.
